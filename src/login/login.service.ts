@@ -20,7 +20,10 @@ export class LoginService {
     const { email, password } = loginDto;
     BodyNull([email, password]);
 
-    const user = await this.userRepository.findOne({ where: { email } });
+    const user = await this.userRepository.findOne({
+      where: { email },
+      select: ['id', 'name', 'email', 'password'],
+    });
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!user?.email || !isPasswordValid) {
       return null;
